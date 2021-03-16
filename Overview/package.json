@@ -1,0 +1,23 @@
+{
+  "name": "sdc_overview",
+  "version": "1.0.0",
+  "description": "SDC project overview",
+  "main": "./server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/tillmattson/Ruby.git"
+  },
+  "author": "Till Mattson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tillmattson/Ruby/"
+  },
+  "homepage": "https://github.com/tillmattson/Ruby#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
