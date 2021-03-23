@@ -5,7 +5,9 @@
   "main": "./server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server"
+    "start": "nodemon server --watch",
+    "loaddb": "node ./ETL/run.js",
+    "cleandata": "sed -i \"s/q=80$/q=80\\\"/g\" dataFiles/photos.csv | sed -i \"s/uhttps/https/g\" dataFiles/photos.csv | sed -i \"s/\\\"default_price\\\": //g\" dataFiles/product.csv"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,10 @@
   },
   "homepage": "https://github.com/tillmattson/Ruby#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "child-process-promise": "^2.2.1"
   }
 }
