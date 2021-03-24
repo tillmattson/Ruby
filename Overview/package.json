@@ -5,9 +5,8 @@
   "main": "./server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server --watch",
-    "loaddb": "node ./ETL/run.js",
-    "cleandata": "sed -i \"s/q=80$/q=80\\\"/g\" dataFiles/photos.csv | sed -i \"s/uhttps/https/g\" dataFiles/photos.csv | sed -i \"s/\\\"default_price\\\": //g\" dataFiles/product.csv"
+    "start": "node server",
+    "loaddatabase": "sed -i \"s/q=80$/q=80\\\"/g\" dataFiles/photos.csv && sed -i \"s/uhttps/https/g\" dataFiles/photos.csv && sed -i \"s/\\\"default_price\\\": //g\" dataFiles/product.csv && node --trace-warnings ./ETL/run.js"
   },
   "repository": {
     "type": "git",

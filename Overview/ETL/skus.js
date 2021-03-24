@@ -1,26 +1,21 @@
-const { Client } = require("pg");
+const { Pool } = require("pg");
 const { DBCONFIG } = require("../config/config.js");
 
-const client = new Client(DBCONFIG);
+const client = new Pool(DBCONFIG);
 
 const run = () => {
-  client
-    .connect()
-    .then(() => console.log("Loading Skus..."))
-    .catch((err) => console.error(err));
-
-  client
-    .query(`create index style_skus on skus(style_id);`)
-    .catch((err) => console.error(err));
+  console.log("Loading Skus...");
 
   return client
-    .query(
-      `COPY skus (id, style_id, size, quantity) FROM '${__dirname}/../dataFiles/skus.csv' delimiter ',' csv header;`
+    .query(`create index style_skus on skus(style_id);`)
+    .then(() =>
+      client.query(
+        `COPY skus (id, style_id, size, quantity) FROM '${__dirname}/../dataFiles/skus.csv' delimiter ',' csv header;`
+      )
     )
-    .catch((e) => console.error(e.stack))
-    .then(() => client.end())
+    .then(() => console.log("Skus Loaded\n"))
     .catch(console.error)
-    .then(() => console.log("Skus Loaded\n"));
+    .then(() => client.end());
 };
 
 module.exports = { run };

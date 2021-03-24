@@ -3,6 +3,8 @@ const db = require(`../database/db.js`);
 const app = express();
 const PORT = 8080;
 
+app.use(express.static(`${__dirname}/pub`));
+
 app.get("/products/", (req, res) => {
   db.getProducts(+req.query.page || 1, +req.query.count || 5)
     .then((data) => {

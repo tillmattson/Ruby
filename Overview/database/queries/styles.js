@@ -38,7 +38,7 @@ const getStyles = (product_id) => {
         styles.map((style) =>
           client
             .query(
-              `select id, size, quantity from skus where style_id = ${style.style_id} order by id asc;`
+              `select id, size, quantity from skus where style_id = ${style.style_id};`
             )
             .then(({ rows }) => {
               rows.map(

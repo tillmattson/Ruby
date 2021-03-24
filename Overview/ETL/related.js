@@ -1,26 +1,21 @@
-const { Client } = require("pg");
+const { Pool } = require("pg");
 const { DBCONFIG } = require("../config/config.js");
 
-const client = new Client(DBCONFIG);
+const client = new Pool(DBCONFIG);
 
 const run = () => {
-  client
-    .connect()
-    .then(() => console.log("Loading Related..."))
-    .catch((err) => console.error(err));
-
-  client
-    .query(`create index related_product on related(product_id);`)
-    .catch(console.error);
+  console.log("Loading Related...");
 
   return client
-    .query(
-      `COPY related (id, product_id, related) FROM '${__dirname}/../dataFiles/related.csv' delimiter ',' csv header;`
+    .query(`create index related_product on related(product_id);`)
+    .then(() =>
+      client.query(
+        `COPY related (id, product_id, related) FROM '${__dirname}/../dataFiles/related.csv' delimiter ',' csv header;`
+      )
     )
-    .catch((e) => console.error(e.stack))
-    .then(() => client.end())
+    .then(() => console.log("Related Loaded\n"))
     .catch(console.error)
-    .then(() => console.log("Related Loaded\n"));
+    .then(() => client.end());
 };
 
 module.exports = { run };

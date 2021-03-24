@@ -34,11 +34,11 @@ const run = () => {
   console.log(`Loading Schema...`);
   return Promise.all(
     tables.map(({ query, name }) =>
-      pool
-        .query(query)
-        .then(() => console.log(`Created Table: ${name}`))
-        .catch(console.error)
+      pool.query(query).then(() => console.log(`Created Table: ${name}`))
     )
-  ).then(() => console.log("Schema complete\n\nStarting load process...\n"));
+  )
+    .then(() => console.log("Schema complete\n\nStarting load process...\n"))
+    .catch(console.error)
+    .then(() => pool.end());
 };
 module.exports = { run };

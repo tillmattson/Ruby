@@ -9,14 +9,15 @@ const skus = require("./skus.js");
 const styles = require("./styles.js");
 const verify = require("./verify.js");
 
-const create = new Pool(DBSCONFIG);
+const pool = new Pool(DBSCONFIG);
 let start = Date.now();
 console.log(`STARTING DATABASE LOAD...\n\n`);
 
-create
+pool
   .query(`create database productdb;`)
   .then(() => console.log(`Created database: productdb \n`))
   .catch(console.error)
+  .then(() => pool.end())
   .then(schema.run)
   .catch(console.error)
   .then(features.run)

@@ -1,19 +1,28 @@
 const { pool } = require("./conn.js");
 
 const getProductAtId = (product_id) => {
-  let product;
+  let product, client;
   return pool
-    .query(`select * from products where id = ${product_id};`)
-    .then(({ rows }) => (product = rows[0]))
+    .connect()
+    .then((conn) =>
+      conn
+        .query(`select * from products where id = ${product_id};`)
+        .then(({ rows }) => {
+          product = rows[0];
+          client = conn;
+          return product;
+        })
+    )
     .then(() =>
-      pool.query(
-        `select feature, value from features where product_id = ${product_id} order by id asc;`
+      client.query(
+        `select feature, value from features where product_id = ${product_id};`
       )
     )
     .then(({ rows }) => {
       if (rows.length) {
         product.features = rows;
       }
+      client.release();
       return product;
     })
     .catch(() =>

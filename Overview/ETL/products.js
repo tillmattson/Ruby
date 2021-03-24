@@ -1,25 +1,20 @@
-const { Client } = require("pg");
+const { Pool } = require("pg");
 const { DBCONFIG } = require("../config/config.js");
 
-const client = new Client(DBCONFIG);
+const client = new Pool(DBCONFIG);
 
 const run = () => {
-  client
-    .connect()
-    .then(() => console.log("Loading Products..."))
-    .catch((err) => console.error(err));
-
-  client
-    .query(`create index products_id on products(id);`)
-    .catch(console.error);
+  console.log(`Loading Products...`);
   return client
-    .query(
-      `COPY products (id, name, slogan, description, category, default_price) FROM '${__dirname}/../dataFiles/product.csv' delimiter ',' csv header;`
+    .query(`create index products_id on products(id);`)
+    .then(() =>
+      client.query(
+        `COPY products (id, name, slogan, description, category, default_price) FROM '${__dirname}/../dataFiles/product.csv' delimiter ',' csv header;`
+      )
     )
-    .catch((e) => console.error(e.stack))
-    .then(() => client.end())
+    .then(() => console.log("Products Loaded\n"))
     .catch(console.error)
-    .then(() => console.log("Products Loaded\n"));
+    .then(() => client.end());
 };
 
 module.exports = { run };
